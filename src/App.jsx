@@ -3,19 +3,24 @@ import { useForm } from 'react-hook-form'
 import './styles.css'
 
 export default function App() {
+  const [successMsg, setSuccessMsg] = useState('')
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm()
 
   const onSubmit = (data) => {
     console.log(data)
+    setSuccessMsg('User registration is successful.')
+    reset()
   }
 
   return (
     <div className='App'>
       <form onSubmit={handleSubmit(onSubmit)}>
+        {successMsg && <p className='success-msg'>{successMsg}</p>}
         <div className='form-control'>
           <label>Email</label>
           <input
