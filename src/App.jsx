@@ -1,76 +1,89 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { Button, Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import './styles.css'
 
 export default function App() {
-  const [successMsg, setSuccessMsg] = useState('')
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset
+    formState: { errors }
   } = useForm()
 
   const onSubmit = (data) => {
     console.log(data)
-    setSuccessMsg('User registration is successful.')
-    reset()
   }
 
   return (
-    <div className='App'>
+    <div className='container'>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {successMsg && <p className='success-msg'>{successMsg}</p>}
-        <div className='form-control'>
-          <label>Email</label>
-          <input
-            type='text'
-            name='email'
+        <Form.Group className='mb-3' controlId='email'>
+          <Form.Label>Email</Form.Label>
+          <Form.Control
+            type='email'
+            placeholder='Enter your email'
             {...register('email', {
-              required: 'Email is required.',
+              required: 'Please enter your email',
               pattern: {
                 value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
-                message: 'Email is not valid.'
+                message: 'Please enter a valid email'
               }
             })}
           />
           {errors.email && <p className='errorMsg'>{errors.email.message}</p>}
-        </div>
-        <div className='form-control'>
-          <label>Password</label>
-          <input
-            type='password'
-            name='password'
-            {...register('password', {
-              required: true,
-              validate: {
-                checkLength: (value) => value.length >= 6,
-                matchPattern: (value) =>
-                  /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s)(?=.*[!@#$*])/.test(
-                    value
-                  )
-              }
+        </Form.Group>
+        <Form.Group className='mb-3' controlId='gender'>
+          <Form.Label>Select Gender</Form.Label>
+          <Form.Check
+            type='radio'
+            label='Male'
+            value='male'
+            {...register('gender', {
+              required: 'Please select your gender'
             })}
           />
-          {errors.password?.type === 'required' && (
-            <p className='errorMsg'>Password is required.</p>
-          )}
-          {errors.password?.type === 'checkLength' && (
-            <p className='errorMsg'>
-              Password should be at-least 6 characters.
-            </p>
-          )}
-          {errors.password?.type === 'matchPattern' && (
-            <p className='errorMsg'>
-              Password should contain at least one uppercase letter, lowercase
-              letter, digit, and special symbol.
-            </p>
-          )}
-        </div>
-        <div className='form-control'>
-          <label></label>
-          <button type='submit'>Login</button>
-        </div>
+          <Form.Check
+            type='radio'
+            label='Female'
+            value='female'
+            {...register('gender')}
+          />
+          {errors.gender && <p className='errorMsg'>{errors.gender.message}</p>}
+        </Form.Group>
+        <Form.Group className='mb-3' controlId='skills'>
+          <Form.Label>Select Your Skills</Form.Label>
+          <Form.Check
+            type='checkbox'
+            label='JavaScript'
+            value='JavaScript'
+            {...register('skills', {
+              required: 'Please select at-least one skill'
+            })}
+          />
+          <Form.Check
+            type='checkbox'
+            label='React'
+            value='react'
+            {...register('skills')}
+          />
+          <Form.Check
+            type='checkbox'
+            label='Node.js'
+            value='nodejs'
+            {...register('skills')}
+          />
+          <Form.Check
+            type='checkbox'
+            label='Angular'
+            value='angular'
+            {...register('skills')}
+          />
+          {errors.skills && <p className='errorMsg'>{errors.skills.message}</p>}
+        </Form.Group>
+        <label></label>
+        <Button type='submit' variant='primary'>
+          Submit
+        </Button>
       </form>
     </div>
   )
