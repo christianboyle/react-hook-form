@@ -3,12 +3,29 @@ import { Button, Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import './styles.css'
 
+const initialValues = {
+  gender: 'male',
+  skills: {
+    JavaScript: true,
+    react: false,
+    nodejs: true,
+    angular: false
+  }
+}
+
 export default function App() {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm()
+  } = useForm({
+    defaultValues: {
+      gender: initialValues.gender,
+      skills: Object.keys(initialValues.skills).filter(
+        (item) => initialValues.skills[item] === true
+      )
+    }
+  })
 
   const onSubmit = (data) => {
     console.log(data)
